@@ -26,6 +26,12 @@ ARUCO_DICT = {
 	"DICT_APRILTAG_36h11": cv2.aruco.DICT_APRILTAG_36h11
 }
 
+def rollPitchYawFromRM(rvec):
+	roll = np.arctan2(rvec[2,1],rvec[2,2])
+	pitch = np.arctan2(-rvec[2,0],np.sqrt(rvec[2,1]**2 + rvec[2,2]**2))
+	yaw = np.arctan2(rvec[1,0],rvec[0,0])
+	return [roll, pitch, yaw]
+
 cam = cv2.VideoCapture(0)
 
 cv2.namedWindow("ArUco Detect")
@@ -56,7 +62,7 @@ while True:
 		ids = ids.flatten()
 		for i in range(len(ids)):
 			rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.02, calibration, dist)
-			print(rvec, tvec)
+			print(np.degrees(rollPitchYawFromRM(cv2.Rodrigues(rvec)[0])), tvec)
 			cv2.aruco.drawDetectedMarkers(frame, corners)
 			cv2.drawFrameAxes(frame, calibration, dist, rvec, tvec, 0.01)
 
