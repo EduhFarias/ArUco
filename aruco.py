@@ -47,8 +47,6 @@ arucoParams = cv2.aruco.DetectorParameters_create()
 calibration = np.load('calibration_mtx.npy')
 dist = np.load('distortion_coeff.npy')
 
-img_counter = 0
-
 while True:
 	ret, frame = cam.read()
 	if not ret:
@@ -76,14 +74,6 @@ while True:
 		# ESC pressed
 		print("Escape hit, closing...")
 		break
-
-	# Save image
-	# elif k%256 == 32:
-	# 	# SPACE pressed
-	# 	img_name = "opencv_frame_{}.jpg".format(img_counter)
-	# 	cv2.imwrite(img_name, frame)
-	# 	print("{} written!".format(img_name))
-	# 	img_counter += 1
 
 cam.release()
 cv2.destroyAllWindows()
